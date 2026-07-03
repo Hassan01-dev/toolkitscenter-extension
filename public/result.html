@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screenshot Export - Toolkitscenter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="result.css">
+  <script src="lib/jspdf.umd.min.js"></script>
+</head>
+<body>
+  <div class="result-layout">
+    
+    <!-- Sidebar / Export Control Center -->
+    <aside class="control-panel">
+      <header class="panel-header">
+        <div class="logo-area">
+          <div class="logo-icon"></div>
+          <h1 class="logo-text">Toolkit<span>Hub</span></h1>
+        </div>
+        <p class="panel-subtitle">Export Control Center</p>
+      </header>
+
+      <!-- Document Metadata Card -->
+      <section class="panel-card metadata-card">
+        <h2 class="card-title">Capture Information</h2>
+        <div class="meta-grid">
+          <div class="meta-label">Source Title</div>
+          <div class="meta-value" id="sourceTitle">Loading...</div>
+          <div class="meta-label">Resolution</div>
+          <div class="meta-value" id="sourceResolution">0 x 0 px</div>
+          <div class="meta-label">Pixel Ratio</div>
+          <div class="meta-value" id="sourceDpr">1x</div>
+        </div>
+      </section>
+
+      <!-- Export Settings Card -->
+      <section class="panel-card settings-card">
+        <h2 class="card-title">Export Settings</h2>
+        
+        <div class="form-group">
+          <label for="fileNameInput" class="form-label">File Name</label>
+          <input type="text" id="fileNameInput" class="form-input" placeholder="screenshot">
+        </div>
+
+        <div class="form-group">
+          <label for="imageFormatSelect" class="form-label">Image Format</label>
+          <select id="imageFormatSelect" class="form-select">
+            <option value="png" selected>PNG (Lossless)</option>
+            <option value="jpeg">JPEG (Compressed)</option>
+          </select>
+        </div>
+
+        <div class="form-group hidden" id="qualityGroup">
+          <label for="imageQualitySlider" class="form-label">
+            <span>Compression Quality</span>
+            <span id="qualityVal">85%</span>
+          </label>
+          <input type="range" id="imageQualitySlider" class="form-slider" min="10" max="100" value="85">
+        </div>
+
+        <div class="form-group" id="pdfLayoutGroup">
+          <label for="pdfLayoutSelect" class="form-label">PDF Page Layout</label>
+          <select id="pdfLayoutSelect" class="form-select">
+            <option value="single" selected>Single Page (Fit Page)</option>
+            <option value="a4">Multi-page A4 (Split)</option>
+            <option value="letter">Multi-page Letter (Split)</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Action Buttons -->
+      <section class="action-group">
+        <button id="downloadImageBtn" class="action-btn primary-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="action-icon">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5"></circle>
+            <polyline points="21 15 16 10 5 21"></polyline>
+          </svg>
+          <span>Download Image</span>
+        </button>
+
+        <button id="downloadPdfBtn" class="action-btn secondary-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="action-icon">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span>Download PDF</span>
+        </button>
+
+        <button id="cropImageBtn" class="action-btn secondary-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="action-icon">
+            <path d="M6 2v14a2 2 0 0 0 2 2h14"></path>
+            <path d="M18 22V8a2 2 0 0 0-2-2H2"></path>
+          </svg>
+          <span>Crop Image</span>
+        </button>
+      </section>
+
+      <footer class="panel-footer">
+        <button id="closeTabBtn" class="text-link-btn">Close Panel</button>
+      </footer>
+    </aside>
+
+    <!-- Main Screenshot Viewer Area -->
+    <main class="viewer-container">
+      <div class="mockup-frame">
+        <!-- Browser Window Mockup Chrome -->
+        <div class="mockup-header">
+          <div class="mockup-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <div class="mockup-url-bar" id="mockupUrl">https://example.com</div>
+        </div>
+
+        <!-- Scrollable Capture Container -->
+        <div class="mockup-content" id="mockupContent">
+          <!-- Spinner shown during processing -->
+          <div class="viewer-loader" id="viewerLoader">
+            <div class="radial-spinner"></div>
+            <p>Assembling captured viewports...</p>
+          </div>
+          
+          <!-- Image preview generated at runtime -->
+          <div class="preview-wrapper" id="previewWrapper">
+            <img id="screenshotPreview" class="screenshot-img hidden" alt="Screenshot Preview">
+            <canvas id="cropCanvas" class="crop-canvas hidden"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Floating Crop Actions -->
+      <div class="crop-actions hidden" id="cropActions">
+        <span class="crop-tip">Click and drag to select crop area</span>
+        <button id="confirmCropBtn" class="crop-action-btn confirm-btn">Apply Crop</button>
+        <button id="cancelCropBtn" class="crop-action-btn cancel-btn">Cancel</button>
+      </div>
+
+      <!-- Floating Zoom Controls -->
+      <div class="zoom-controls hidden" id="zoomControls">
+        <button id="zoomOutBtn" class="zoom-btn" title="Zoom Out">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+        <span class="zoom-level" id="zoomLevelText">Fit</span>
+        <button id="zoomInBtn" class="zoom-btn" title="Zoom In">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+        <button id="zoomResetBtn" class="zoom-btn" title="Fit to Screen">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path>
+          </svg>
+        </button>
+      </div>
+    </main>
+
+  </div>
+  <script src="result.js"></script>
+</body>
+</html>
