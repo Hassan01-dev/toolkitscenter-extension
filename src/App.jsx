@@ -11,6 +11,7 @@ import Base64Panel from './components/Base64Panel.jsx';
 import LoremIpsumPanel from './components/LoremIpsumPanel.jsx';
 import QuickActionButton from './components/QuickActionButton.jsx';
 import { clearCookiesForActiveTab, fillFormsForActiveTab } from './utils/quickActions.js';
+import RegexPanel from './components/RegexPanel.jsx';
 
 function App() {
   const [activePanel, setActivePanel] = useState(null);
@@ -193,6 +194,29 @@ function App() {
           <circle cx="12" cy="12" r="3"></circle>
           <path d="M3 16V8a5 5 0 0 1 10 0v8a5 5 0 0 1-10 0z"></path>
           <path d="M11 16V8a5 5 0 0 1 10 0v8a5 5 0 0 1-10 0z"></path>
+        </svg>
+      )
+    },
+    {
+      id: 'regex',
+      title: 'Regex Tester',
+      desc: 'Test strings against a pattern',
+      cat: 'utils',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" />
+          <path d="M13 9.5v5" />
+          <path d="M11 12h4" />
+          <path d="M11.8 10.2l2.4 3.6" />
+          <path d="M14.2 10.2l-2.4 3.6" />
         </svg>
       )
     },
@@ -436,6 +460,14 @@ function App() {
       <PasswordPanel isActive={activePanel === 'password'} onBack={() => setActivePanel(null)} />
 
       <UuidPanel isActive={activePanel === 'uuid'} onBack={() => setActivePanel(null)} />
+
+      <CookieClearPanel
+        isActive={activePanel === 'cookie'}
+        onBack={() => setActivePanel(null)}
+        activeTab={activeTab}
+      />
+
+      <RegexPanel isActive={activePanel === 'regex'} onBack={() => setActivePanel(null)} />
 
       <HashPanel isActive={activePanel === 'hash'} onBack={() => setActivePanel(null)} />
 
