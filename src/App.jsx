@@ -461,12 +461,6 @@ function App() {
 
       <UuidPanel isActive={activePanel === 'uuid'} onBack={() => setActivePanel(null)} />
 
-      <CookieClearPanel
-        isActive={activePanel === 'cookie'}
-        onBack={() => setActivePanel(null)}
-        activeTab={activeTab}
-      />
-
       <RegexPanel isActive={activePanel === 'regex'} onBack={() => setActivePanel(null)} />
 
       <HashPanel isActive={activePanel === 'hash'} onBack={() => setActivePanel(null)} />
