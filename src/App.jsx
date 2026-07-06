@@ -10,6 +10,7 @@ import BulkUrlPanel from './components/BulkUrlPanel.jsx';
 import QrCodePanel from './components/QrCodePanel.jsx';
 import Base64Panel from './components/Base64Panel.jsx';
 import LoremIpsumPanel from './components/LoremIpsumPanel.jsx';
+import RegexPanel from './components/RegexPanel.jsx';
 
 function App() {
   const [activePanel, setActivePanel] = useState(null);
@@ -220,6 +221,29 @@ function App() {
       disabled: isScreenshotDisabled
     },
     {
+      id: 'regex',
+      title: 'Regex Tester',
+      desc: 'Test strings against a pattern',
+      cat: 'utils',
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" />
+          <path d="M13 9.5v5" />
+          <path d="M11 12h4" />
+          <path d="M11.8 10.2l2.4 3.6" />
+          <path d="M14.2 10.2l-2.4 3.6" />
+        </svg>
+      )
+    },
+    {
       id: 'hash',
       title: 'Hash Generator',
       desc: 'Generate MD5, SHA-256 digests',
@@ -416,6 +440,8 @@ function App() {
         onBack={() => setActivePanel(null)}
         activeTab={activeTab}
       />
+
+      <RegexPanel isActive={activePanel === 'regex'} onBack={() => setActivePanel(null)} />
 
       <HashPanel isActive={activePanel === 'hash'} onBack={() => setActivePanel(null)} />
 
