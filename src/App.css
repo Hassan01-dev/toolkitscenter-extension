@@ -142,6 +142,161 @@ body {
   border-color: var(--color-primary);
 }
 
+/* Quick Actions — instant, one-click tools featured above the rest */
+.quick-actions-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.quick-action-card {
+  position: relative;
+  background: linear-gradient(150deg, rgba(59, 130, 246, 0.16), rgba(139, 92, 246, 0.1));
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  border-radius: 10px;
+  padding: 12px 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  transition: var(--transition-normal);
+  overflow: hidden;
+}
+
+.quick-action-card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px -6px rgba(59, 130, 246, 0.45);
+}
+
+.quick-action-card.disabled-tool {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.quick-action-card.disabled-tool:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: rgba(96, 165, 250, 0.35);
+}
+
+.quick-action-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 0.52rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: var(--color-primary);
+  padding: 2px 6px;
+  border-radius: 20px;
+}
+
+.quick-action-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(59, 130, 246, 0.18);
+  color: var(--color-primary);
+  flex-shrink: 0;
+  transition: var(--transition-normal);
+}
+
+.quick-action-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.quick-action-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.quick-action-title {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.quick-action-desc {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+.quick-action-spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-top-color: var(--color-primary);
+  animation: spin 0.7s linear infinite;
+}
+
+.quick-action-success .quick-action-icon {
+  background-color: rgba(16, 185, 129, 0.18);
+  color: #10b981;
+  animation: quickActionPop 0.3s ease-out;
+}
+
+.quick-action-success {
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.quick-action-success .quick-action-desc {
+  color: #a7f3d0;
+  font-weight: 600;
+}
+
+.quick-action-error .quick-action-icon {
+  background-color: rgba(239, 68, 68, 0.18);
+  color: #ef4444;
+  animation: quickActionShake 0.35s ease-in-out;
+}
+
+.quick-action-error {
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.quick-action-error .quick-action-desc {
+  color: #fca5a5;
+  font-weight: 600;
+}
+
+@keyframes quickActionPop {
+  0% {
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes quickActionShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-3px);
+  }
+  75% {
+    transform: translateX(3px);
+  }
+}
+
 /* Tools Dashboard Grid */
 .dashboard-grid {
   display: grid;

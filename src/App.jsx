@@ -4,12 +4,13 @@ import ColorPickerPanel from './components/ColorPickerPanel.jsx';
 import JwtPanel from './components/JwtPanel.jsx';
 import PasswordPanel from './components/PasswordPanel.jsx';
 import UuidPanel from './components/UuidPanel.jsx';
-import CookieClearPanel from './components/CookieClearPanel.jsx';
 import HashPanel from './components/HashPanel.jsx';
 import BulkUrlPanel from './components/BulkUrlPanel.jsx';
 import QrCodePanel from './components/QrCodePanel.jsx';
 import Base64Panel from './components/Base64Panel.jsx';
 import LoremIpsumPanel from './components/LoremIpsumPanel.jsx';
+import QuickActionButton from './components/QuickActionButton.jsx';
+import { clearCookiesForActiveTab, fillFormsForActiveTab } from './utils/quickActions.js';
 import RegexPanel from './components/RegexPanel.jsx';
 
 function App() {
@@ -196,30 +197,6 @@ function App() {
         </svg>
       )
     },
-
-    {
-      id: 'cookie',
-      title: 'Cookie Clear',
-      desc: 'Clean cookies for the current tab',
-      cat: 'utils',
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"></path>
-          <circle cx="8.5" cy="8.5" r="1"></circle>
-          <circle cx="11.5" cy="11.5" r="1"></circle>
-          <circle cx="15.5" cy="8.5" r="1"></circle>
-          <circle cx="14.5" cy="14.5" r="1"></circle>
-        </svg>
-      ),
-      disabled: isScreenshotDisabled
-    },
     {
       id: 'regex',
       title: 'Regex Tester',
@@ -365,6 +342,55 @@ function App() {
         </div>
       )}
 
+      {/* Quick Actions — instant, one-click tools */}
+      {activePanel === null && (
+        <div className="quick-actions-row">
+          <QuickActionButton
+            title="Cookie Clear"
+            desc="Clear all cookies for this tab"
+            disabled={isScreenshotDisabled}
+            onRun={() => clearCookiesForActiveTab(activeTab)}
+            icon={
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8z"></path>
+                <circle cx="8.5" cy="8.5" r="1"></circle>
+                <circle cx="11.5" cy="11.5" r="1"></circle>
+                <circle cx="15.5" cy="8.5" r="1"></circle>
+                <circle cx="14.5" cy="14.5" r="1"></circle>
+              </svg>
+            }
+          />
+          <QuickActionButton
+            title="Fake Data Filler"
+            desc="Auto-fill this page's forms"
+            disabled={isScreenshotDisabled}
+            onRun={() => fillFormsForActiveTab(activeTab)}
+            icon={
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect x="4" y="3" width="16" height="18" rx="2" ry="2"></rect>
+                <line x1="8" y1="8" x2="16" y2="8"></line>
+                <line x1="8" y1="12" x2="13" y2="12"></line>
+                <polyline points="8 16.5 10 18.5 16 12.5"></polyline>
+              </svg>
+            }
+          />
+        </div>
+      )}
+
       {/* Category Tabs Filter */}
       {activePanel === null && (
         <nav className="category-tabs">
@@ -434,12 +460,6 @@ function App() {
       <PasswordPanel isActive={activePanel === 'password'} onBack={() => setActivePanel(null)} />
 
       <UuidPanel isActive={activePanel === 'uuid'} onBack={() => setActivePanel(null)} />
-
-      <CookieClearPanel
-        isActive={activePanel === 'cookie'}
-        onBack={() => setActivePanel(null)}
-        activeTab={activeTab}
-      />
 
       <RegexPanel isActive={activePanel === 'regex'} onBack={() => setActivePanel(null)} />
 
