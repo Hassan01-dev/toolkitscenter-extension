@@ -162,7 +162,11 @@ function RegexPanel({ isActive, onBack }) {
                   marginBottom: '4px'
                 }}
               >
-                <label htmlFor={`regexValue${index}`} className="form-label" style={{ marginBottom: 0 }}>
+                <label
+                  htmlFor={`regexValue${index}`}
+                  className="form-label"
+                  style={{ marginBottom: 0 }}
+                >
                   Test value {index + 1}
                 </label>
                 {hasResult && (
