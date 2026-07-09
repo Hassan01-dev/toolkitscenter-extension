@@ -3,8 +3,14 @@ import QRCode from 'qrcode';
 
 function QrCodePanel({ isActive, onBack, activeTab }) {
   const [inputText, setInputText] = useState('');
+  const [extraInfo, setExtraInfo] = useState('');
   const canvasRef = useRef(null);
   const [errorMsg, setErrorMsg] = useState('');
+
+  // Combined value used for QR code generation
+  const qrData = extraInfo.trim()
+    ? `${inputText}\n${extraInfo.trim()}`
+    : inputText;
 
   // Set the current tab URL as initial input when active
   useEffect(() => {
@@ -13,9 +19,9 @@ function QrCodePanel({ isActive, onBack, activeTab }) {
     }
   }, [isActive, activeTab]);
 
-  // Redraw QR code whenever input changes
+  // Redraw QR code whenever input or extra info changes
   useEffect(() => {
-    if (!inputText.trim()) {
+    if (!qrData.trim()) {
       // Clear canvas if input is empty
       const canvas = canvasRef.current;
       if (canvas) {
@@ -27,7 +33,7 @@ function QrCodePanel({ isActive, onBack, activeTab }) {
 
     QRCode.toCanvas(
       canvasRef.current,
-      inputText,
+      qrData,
       {
         width: 130,
         margin: 1,
@@ -45,7 +51,7 @@ function QrCodePanel({ isActive, onBack, activeTab }) {
         }
       }
     );
-  }, [inputText]);
+  }, [qrData]);
 
   const handleDownload = () => {
     const canvas = canvasRef.current;
@@ -84,7 +90,7 @@ function QrCodePanel({ isActive, onBack, activeTab }) {
 
       <p className="detail-desc">Generate a QR code from text or link. Downloads as PNG.</p>
 
-      <div className="form-group" style={{ marginBottom: '10px' }}>
+      <div className="form-group" style={{ marginBottom: '8px' }}>
         <label htmlFor="qrInputText" className="form-label">
           Data Text or URL
         </label>
@@ -96,6 +102,28 @@ function QrCodePanel({ isActive, onBack, activeTab }) {
           placeholder="Type or paste link..."
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
+        />
+      </div>
+
+      <div className="form-group" style={{ marginBottom: '10px' }}>
+        <label htmlFor="qrExtraInfo" className="form-label">
+          Additional Information <span style={{ fontWeight: 400, opacity: 0.6, fontSize: '0.72rem' }}>(optional)</span>
+        </label>
+        <textarea
+          id="qrExtraInfo"
+          className="form-input"
+          style={{
+            padding: '6px 8px',
+            resize: 'vertical',
+            minHeight: '60px',
+            maxHeight: '120px',
+            fontFamily: 'inherit',
+            fontSize: 'inherit',
+            lineHeight: '1.4'
+          }}
+          placeholder="Add extra details, notes, or contact info..."
+          value={extraInfo}
+          onChange={(e) => setExtraInfo(e.target.value)}
         />
       </div>
 
@@ -129,7 +157,7 @@ function QrCodePanel({ isActive, onBack, activeTab }) {
         <button
           className="secondary-btn compact-btn"
           onClick={handleDownload}
-          disabled={!inputText.trim()}
+          disabled={!qrData.trim()}
           style={{ fontSize: '0.68rem', display: 'flex', alignItems: 'center', gap: '4px' }}
         >
           <svg
